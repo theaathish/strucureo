@@ -1,7 +1,7 @@
 "use client";
 import FreelancerLayout from "../FreelancerLayout";
 import { useState, useEffect } from "react";
-import Header from "@/components/Header";
+// Removed unused Header import
 import Footer from "@/components/Footer";
 import { getFirestore, collection, setDoc, doc, query, orderBy, onSnapshot, getDocs } from "firebase/firestore";
 import { getAuth } from "firebase/auth";

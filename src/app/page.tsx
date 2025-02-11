@@ -1,7 +1,6 @@
 "use client";
 
 import Header from "@/components/Header";
-import Services from "@/components/Services";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import Image from "next/image";
@@ -19,7 +18,7 @@ function Hero() {
       setCurrentImage((prev) => (prev + 1) % images.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [images.length]);
 
   // Typing Effect
   React.useEffect(() => {
