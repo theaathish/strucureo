@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { firebaseApp } from "../../../firebase/firebaseConfig";
+import { FirebaseError } from "@/types";
 
 export default function LoginPage() {
   const auth = getAuth(firebaseApp);
@@ -20,8 +21,9 @@ export default function LoginPage() {
       const roleMatch = display.match(/\((client|freelancer)\)/);
       const role = roleMatch ? roleMatch[1] : "freelancer";
       router.push(role === "client" ? "/freelancer/client" : "/freelancer/freelancer");
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      const firebaseError = err as FirebaseError;
+      setError(firebaseError.message);
     }
   };
 

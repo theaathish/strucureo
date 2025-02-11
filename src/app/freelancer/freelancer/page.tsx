@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { getFirestore, collectionGroup, addDoc, collection, serverTimestamp, query, orderBy, onSnapshot, getDocs, where } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { firebaseApp } from "@/firebase/firebaseConfig";
+import { Job, FirebaseError } from "@/types";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -10,8 +11,8 @@ export default function FreelancerDashboard() {
   const db = getFirestore(firebaseApp);
   const auth = getAuth(firebaseApp);
   const user = auth.currentUser; // For applicant email
-  const [jobs, setJobs] = useState<any[]>([]);
-  const [selectedJob, setSelectedJob] = useState<any>(null);
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [applicationMessage, setApplicationMessage] = useState("");
 
 
@@ -19,20 +20,29 @@ export default function FreelancerDashboard() {
     // Query jobs from all clients using a collectionGroup query on "jobs"
     const q = query(collectionGroup(db, "jobs"), orderBy("createdAt", "desc"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const jobsData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ref: doc.ref, // Retain reference to add subcollection later
-        ...doc.data(),
-      }));
+      const jobsData = snapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          title: data.title,
+          description: data.description,
+          createdAt: data.createdAt,
+          ref: doc.ref
+        } as Job;
+      });
       setJobs(jobsData);
     });
     return () => unsubscribe();
   }, [db]);
 
-  const handleApply = async (job: any, e: React.FormEvent) => {
+  const handleApply = async (job: Job, e: React.FormEvent) => {
     e.preventDefault();
     if (!user) {
       console.error("User not logged in");
+      return;
+    }
+    if (!job.ref) {
+      console.error("Invalid job reference");
       return;
     }
     try {
@@ -52,8 +62,9 @@ export default function FreelancerDashboard() {
       setApplicationMessage("");
       setSelectedJob(null);
       alert(`Application submitted for: ${job.title}`);
-    } catch (error: any) {
-      console.error("Error applying:", error.message);
+    } catch (error) {
+      const firebaseError = error as FirebaseError;
+      console.error("Error applying:", firebaseError.message);
     }
   };
 

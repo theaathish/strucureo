@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { firebaseApp } from "../../../firebase/firebaseConfig";
+import { FirebaseError } from "@/types";
 
 export default function SignupPage() {
   const auth = getAuth(firebaseApp);
@@ -20,8 +21,9 @@ export default function SignupPage() {
       // Combine name and role in displayName e.g. "John Doe (client)"
       await updateProfile(result.user, { displayName: `${name} (${role})` });
       router.push(role === "client" ? "/freelancer/client" : "/freelancer/freelancer");
-    } catch (err: any) {
-      setError(err.message);
+    } catch (error) {
+      const firebaseError = error as FirebaseError;
+      setError(firebaseError.message);
     }
   };
 

@@ -1,6 +1,7 @@
 "use client";
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,7 +11,13 @@ export default function Header() {
       <div className="max-w-6xl mx-auto flex justify-between items-center py-4 px-4">
         <Link href="/" className="flex items-center">
           {/* White theme: use standard logo */}
-          <img src="/logo.png" alt="Strucureo Logo" className="h-12 w-auto" />
+          <Image
+            src="/logo.png"
+            alt="Strucureo Logo"
+            width={40}
+            height={40}
+            className="h-10 w-auto"
+          />
         </Link>
 
         {/* Desktop Navigation */}

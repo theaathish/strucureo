@@ -1,11 +1,20 @@
+import Link from 'next/link';
+import Image from 'next/image';
+
 export default function Footer() {
   return (
     <footer className="w-full max-w-6xl mx-auto py-6 px-4 border-t border-gray-200 mt-10">
       <div className="flex flex-col md:flex-row justify-between items-center">
         {/* Logo */}
-        <a href="/" className="flex items-center mb-4 md:mb-0">
-          <img src="/logo.png" alt="Strucureo Logo" className="h-24 w-auto" />
-        </a>
+        <Link href="/" className="flex items-center mb-4 md:mb-0">
+          <Image
+            src="/logo.png"
+            alt="Strucureo Logo"
+            width={32}
+            height={32}
+            className="h-8 w-auto"
+          />
+        </Link>
         {/* Navigation Links */}
         <nav className="flex space-x-4 mb-4 md:mb-0">
           <a href="/services" className="text-gray-700 hover:text-green-500">Services</a>

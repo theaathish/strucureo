@@ -2,13 +2,18 @@
 import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { getFirestore, collection, setDoc, doc, serverTimestamp, query, orderBy, onSnapshot, getDocs } from "firebase/firestore";
+import { getFirestore, collection, setDoc, doc, query, orderBy, onSnapshot, getDocs } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { firebaseApp } from "@/firebase/firebaseConfig";
+import { Job, Application } from "@/types";
 
 // Simple slugify function
 const slugify = (text: string) =>
   text.toLowerCase().trim().replace(/\s+/g, "-").replace(/[^a-z0-9\-]/g, "");
+
+interface JobWithApplications extends Job {
+  applications: Application[];
+}
 
 export default function ClientDashboard() {
   const db = getFirestore(firebaseApp);
@@ -16,7 +21,7 @@ export default function ClientDashboard() {
   const [user, setUser] = useState(auth.currentUser); // Assumes user is logged in
   const [jobTitle, setJobTitle] = useState("");
   const [jobDesc, setJobDesc] = useState("");
-  const [jobs, setJobs] = useState<any[]>([]);
+  const [jobs, setJobs] = useState<JobWithApplications[]>([]);
 
   // Subscribe to current client's jobs from "clients/{email}/jobs"
   useEffect(() => {
@@ -29,12 +34,17 @@ export default function ClientDashboard() {
           const jobsData = await Promise.all(snapshot.docs.map(async (doc) => {
             const applicationsRef = collection(doc.ref, "applications");
             const applicationsSnapshot = await getDocs(applicationsRef);
-            const applications = applicationsSnapshot.docs.map(appDoc => appDoc.data());
+            const applications = applicationsSnapshot.docs.map(appDoc => appDoc.data() as Application);
+            
+            const data = doc.data();
             return {
               id: doc.id,
-              ...doc.data(),
-              applications,
-            };
+              title: data.title,
+              description: data.description,
+              createdAt: data.createdAt,
+              ref: doc.ref,
+              applications
+            } as JobWithApplications;
           }));
           setJobs(jobsData);
         });
@@ -46,21 +56,24 @@ export default function ClientDashboard() {
 
   const handlePostJob = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) {
-      console.error("User not logged in");
-      return;
-    }
+    if (!user?.email) return;
+    
     try {
       const slug = slugify(jobTitle);
-      const newJob = { title: jobTitle, description: jobDesc, createdAt: serverTimestamp() };
-      // Write the job at: clients/{user.email}/jobs/{slug}
-      await setDoc(doc(db, "clients", user.email as string, "jobs", slug), newJob);
-      // Local state update (optional)
+      const jobRef = doc(db, "clients", user.email, "jobs", slug);
+      const newJob: Omit<Job, 'id'> = {
+        title: jobTitle,
+        description: jobDesc,
+        createdAt: new Date(),
+        ref: jobRef
+      };
+      
+      await setDoc(jobRef, newJob);
       setJobs([{ id: slug, ...newJob, applications: [] }, ...jobs]);
       setJobTitle("");
       setJobDesc("");
-    } catch (error: any) {
-      console.error("Error posting job:", error.message);
+    } catch (error) {
+      console.error("Error posting job:", error);
     }
   };
 
@@ -105,7 +118,7 @@ export default function ClientDashboard() {
               <p>{job.description}</p>
               <h5 className="text-lg font-semibold mt-4">Applications:</h5>
               <ul className="space-y-2">
-                {job.applications?.map((app: any, index: number) => (
+                {job.applications?.map((app: Application, index: number) => (
                   <li key={index} className="p-2 border border-gray-300 rounded">
                     <p><strong>Email:</strong> {app.applicantEmail}</p>
                     <p><strong>Note:</strong> {app.note}</p>

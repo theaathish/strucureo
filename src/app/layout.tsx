@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Head from "next/head";
+import Image from 'next/image';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -47,7 +48,13 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <header className="flex items-center justify-between p-4 bg-white shadow-md">
-          <img src="/logo.png" alt="Strucureo Logo" className="h-10" />
+          <Image
+            src="/logo.png"
+            alt="Strucureo Logo"
+            width={40}
+            height={40}
+            className="h-10 w-auto"
+          />
           <h1 className="text-2xl font-bold">Strucureo</h1>
         </header>
         {children}
