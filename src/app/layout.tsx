@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Head from "next/head";
 import Image from 'next/image';
 
 const geistSans = Geist({
@@ -19,6 +18,27 @@ export const metadata: Metadata = {
   description: "Find high-quality freelance jobs & connect with skilled professionals. Work remotely with the best clients on Strucureo.",
   keywords: "freelance jobs, remote work, work from home, freelancers, clients, Upwork alternative, Fiverr, Naukri jobs",
   robots: "index, follow",
+  openGraph: {
+    title: "Strucureo - Best Freelance Jobs & Clients",
+    description: "Join Strucureo to find remote jobs, freelance projects, and top clients worldwide.",
+    images: [
+      {
+        url: "/seo-image.jpg",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    title: "Strucureo - Find Freelance Jobs & Clients",
+    description: "Discover top freelance opportunities and work with global clients on Strucureo.",
+    images: [
+      {
+        url: "/seo-image.jpg",
+      },
+    ],
+    card: "summary_large_image",
+  },
+  viewport: "width=device-width, initial-scale=1",
 };
 
 export default function RootLayout({
@@ -28,22 +48,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Head>
-        <title>Strucureo - Best Freelance Jobs & Talented Clients</title>
-        <meta name="description" content="Find high-quality freelance jobs & connect with skilled professionals. Work remotely with the best clients on Strucureo." />
-        <meta name="keywords" content="freelance jobs, remote work, work from home, freelancers, clients, Upwork alternative, Fiverr, Naukri jobs" />
-        <meta name="robots" content="index, follow" />
-        <meta property="og:title" content="Strucureo - Best Freelance Jobs & Clients" />
-        <meta property="og:description" content="Join Strucureo to find remote jobs, freelance projects, and top clients worldwide." />
-        <meta property="og:image" content="/seo-image.jpg" />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:title" content="Strucureo - Find Freelance Jobs & Clients" />
-        <meta name="twitter:description" content="Discover top freelance opportunities and work with global clients on Strucureo." />
-        <meta name="twitter:image" content="/seo-image.jpg" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

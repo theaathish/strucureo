@@ -1,4 +1,5 @@
 "use client";
+import FreelancerLayout from "../FreelancerLayout";
 import { useState, useEffect } from "react";
 import { getFirestore, collectionGroup, addDoc, collection, serverTimestamp, query, orderBy, onSnapshot, getDocs, where } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
@@ -69,51 +70,52 @@ export default function FreelancerDashboard() {
   };
 
   return (
-
-    <div className="min-h-screen bg-white text-gray-900 p-6">
-      <Header />
+    <FreelancerLayout>
       <h2 className="text-3xl font-bold mb-6">Freelancer Dashboard</h2>
-      <section>
-        <h3 className="text-2xl mb-4">Available Jobs</h3>
-        <ul className="space-y-4">
-          {jobs.map(job => (
-            <li key={job.id} className="p-4 border border-gray-200 rounded flex justify-between items-center">
-              <div>
-                <h4 className="text-xl font-semibold">{job.title}</h4>
-                <p>{job.description}</p>
-              </div>
-              <button
-                onClick={() => setSelectedJob(job)}
-                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
-              >
-                Apply
-              </button>
-            </li>
-          ))}
-        </ul>
-      </section>
-      {selectedJob && (
-        <section className="mt-8 p-4 border border-gray-300 rounded">
-          <h4 className="text-2xl font-semibold mb-4">Apply for: {selectedJob.title}</h4>
-          <form onSubmit={e => handleApply(selectedJob, e)} className="space-y-4">
-            <textarea
-              placeholder="Write your application note..."
-              value={applicationMessage}
-              onChange={e => setApplicationMessage(e.target.value)}
-              rows={4}
-              className="w-full p-3 border border-gray-300 rounded"
-              required
-            ></textarea>
-            <button
-              type="submit"
-              className="bg-green-500 text-white px-6 py-3 rounded hover:bg-green-600 transition-colors"
-            >
-              Submit Application
-            </button>
-          </form>
+      <div className="min-h-screen bg-white text-gray-900 p-6">
+        <Header />
+        <section>
+          <h3 className="text-2xl mb-4">Available Jobs</h3>
+          <ul className="space-y-4">
+            {jobs.map(job => (
+              <li key={job.id} className="p-4 border border-gray-200 rounded flex justify-between items-center">
+                <div>
+                  <h4 className="text-xl font-semibold">{job.title}</h4>
+                  <p>{job.description}</p>
+                </div>
+                <button
+                  onClick={() => setSelectedJob(job)}
+                  className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
+                >
+                  Apply
+                </button>
+              </li>
+            ))}
+          </ul>
         </section>
-      )}
-      <Footer />
-    </div>
+        {selectedJob && (
+          <section className="mt-8 p-4 border border-gray-300 rounded">
+            <h4 className="text-2xl font-semibold mb-4">Apply for: {selectedJob.title}</h4>
+            <form onSubmit={e => handleApply(selectedJob, e)} className="space-y-4">
+              <textarea
+                placeholder="Write your application note..."
+                value={applicationMessage}
+                onChange={e => setApplicationMessage(e.target.value)}
+                rows={4}
+                className="w-full p-3 border border-gray-300 rounded"
+                required
+              ></textarea>
+              <button
+                type="submit"
+                className="bg-green-500 text-white px-6 py-3 rounded hover:bg-green-600 transition-colors"
+              >
+                Submit Application
+              </button>
+            </form>
+          </section>
+        )}
+        <Footer />
+      </div>
+    </FreelancerLayout>
   );
 }

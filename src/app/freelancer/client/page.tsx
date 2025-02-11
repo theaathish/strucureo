@@ -1,4 +1,5 @@
 "use client";
+import FreelancerLayout from "../FreelancerLayout";
 import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -78,8 +79,7 @@ export default function ClientDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 p-6">
-      <Header />
+    <FreelancerLayout>
       <h2 className="text-3xl font-bold mb-6">Client Dashboard</h2>
       <section className="mb-8">
         <h3 className="text-2xl mb-4">Post a Job</h3>
@@ -130,6 +130,6 @@ export default function ClientDashboard() {
         </ul>
       </section>
       <Footer />
-    </div>
+    </FreelancerLayout>
   );
 }
