@@ -15,7 +15,9 @@ export default function FreelancerDashboard() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [applicationMessage, setApplicationMessage] = useState("");
-
+  
+  // New filter state for jobs
+  const [filterText, setFilterText] = useState("");
 
   useEffect(() => {
     // Query jobs from all clients using a collectionGroup query on "jobs"
@@ -69,6 +71,12 @@ export default function FreelancerDashboard() {
     }
   };
 
+  // Filter jobs by title or description (case insensitive)
+  const filteredJobs = jobs.filter(job =>
+    job.title.toLowerCase().includes(filterText.toLowerCase()) ||
+    job.description.toLowerCase().includes(filterText.toLowerCase())
+  );
+
   return (
     <FreelancerLayout>
       <h2 className="text-3xl font-bold mb-6">Freelancer Dashboard</h2>
@@ -76,8 +84,16 @@ export default function FreelancerDashboard() {
         <Header />
         <section>
           <h3 className="text-2xl mb-4">Available Jobs</h3>
+          {/* New Filter Input */}
+          <input
+            type="text"
+            placeholder="Search jobs..."
+            value={filterText}
+            onChange={e => setFilterText(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded mb-4"
+          />
           <ul className="space-y-4">
-            {jobs.map(job => (
+            {filteredJobs.map(job => (
               <li key={job.id} className="p-4 border border-gray-200 rounded flex justify-between items-center">
                 <div>
                   <h4 className="text-xl font-semibold">{job.title}</h4>

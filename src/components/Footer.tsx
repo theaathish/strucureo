@@ -12,7 +12,8 @@ export default function Footer() {
             alt="Strucureo Logo"
             width={32}
             height={32}
-            className="h-8 w-auto"
+            className="h-8 w-auto object-contain"
+            style={{ filter: 'none' }}
           />
         </Link>
         {/* Navigation Links */}
@@ -23,7 +24,7 @@ export default function Footer() {
         </nav>
         {/* Contact Details */}
         <div className="text-center mb-4 md:mb-0">
-          <p className="text-gray-500 text-sm">contact@strucureo.com</p>
+          <p className="text-gray-500 text-sm">aathish@theaathish.site</p>
           <p className="text-gray-500 text-sm">+91 74489 98628</p>
         </div>
         {/* Social Media Links */}
@@ -34,7 +35,7 @@ export default function Footer() {
         </div>
       </div>
       <p className="mt-4 text-center text-gray-500 text-sm">
-        © {new Date().getFullYear()} Strucureo. All rights reserved.
+        © {new Date().getFullYear()} Strucureo. I don't About Copyrights.
       </p>
     </footer>
   );

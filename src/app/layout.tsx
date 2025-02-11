@@ -58,6 +58,7 @@ export default function RootLayout({
             width={40}
             height={40}
             className="h-10 w-auto"
+            style={{ filter: 'none' }} // Remove glowing effect by setting no filter
           />
           <h1 className="text-2xl font-bold">Strucureo</h1>
         </header>

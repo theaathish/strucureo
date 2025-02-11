@@ -1,13 +1,14 @@
 "use client";
 
 import Header from "@/components/Header";
+import Services from "@/components/Services";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import Image from "next/image";
 import React from "react";
 
 function Hero() {
-  const images = ["/temp.jpg", "/temp1.jpg", "/temp.jpg"];
+  const images = ["/temp2.jpeg", "/temp3.png", "/temp4.jpg"];
   const [currentImage, setCurrentImage] = React.useState(0);
   const fullText = "Exploring the Future of Digital Workforce";
   const [displayText, setDisplayText] = React.useState("");
@@ -18,18 +19,20 @@ function Hero() {
       setCurrentImage((prev) => (prev + 1) % images.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, [images.length]);
+  }, []);
 
-  // Typing Effect
+  // Updated Typing Effect using recursive setTimeout
   React.useEffect(() => {
     let index = 0;
-    const timer = setInterval(() => {
-      setDisplayText(fullText.slice(0, index + 1));
-      index++;
-      if (index === fullText.length) clearInterval(timer);
-    }, 100);
-    return () => clearInterval(timer);
-  }, []);
+    function type() {
+      if (index < fullText.length) {
+        setDisplayText(fullText.slice(0, index + 1));
+        index++;
+        setTimeout(type, 100);
+      }
+    }
+    type();
+  }, [fullText]);
 
   return (
     <main className="flex-1 py-20 px-4 bg-gray-50">

@@ -2,7 +2,7 @@ export default function Contact() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative w-full h-80 rounded-lg overflow-hidden shadow-lg mt-20">
+      <section className="relative w-full h-80 rounded-lg overflow-hidden shadow-lg mt-50">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: "url('/contact-hero.jpg')" }}

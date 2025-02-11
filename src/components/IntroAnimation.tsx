@@ -9,8 +9,9 @@ export default function IntroAnimation({ onFinish }: IntroProps) {
   const fullText = "Where Great Minds Connect";
   const [displayText, setDisplayText] = useState("");
   const [isComplete, setIsComplete] = useState(false);
-  const [fade, setFade] = useState(false);
+  const [animateOut, setAnimateOut] = useState(false);
 
+  // Typing effect: type one character every 100ms
   useEffect(() => {
     let index = 0;
     const interval = setInterval(() => {
@@ -24,24 +25,18 @@ export default function IntroAnimation({ onFinish }: IntroProps) {
     return () => clearInterval(interval);
   }, [fullText]);
 
+  // When user clicks, start fade/scroll animation
   const handleFinish = () => {
-    setFade(true);
-    setTimeout(onFinish, 1000);
+    setAnimateOut(true);
+    setTimeout(onFinish, 1500);
   };
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex flex-col items-center justify-center transition-opacity duration-1000 ${
-        fade ? "opacity-0" : "opacity-100"
-      }`}
-      style={{
-        background:
-          "radial-gradient(#fff 1px, transparent 1px), radial-gradient(#fff 1px, #fafafa 1px)",
-        backgroundSize: "20px 20px",
-        backgroundPosition: "0 0,10px 10px",
-      }}
+      className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-white transition-all duration-1000 
+        ${animateOut ? "opacity-0 -translate-y-full" : "opacity-100 translate-y-0"}`}
     >
-      <h1 className="text-4xl font-bold mb-8">
+      <h1 className="text-4xl font-bold mb-8 transition-transform duration-1000">
         {displayText}
       </h1>
       {isComplete && (
